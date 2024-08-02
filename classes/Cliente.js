@@ -12,13 +12,11 @@ class Cliente {
   
     // Mostra as informações do cliente
     verDados() {
-      // Junta as informações em uma única frase
       return `ID: ${this.id}, Nome: ${this.nome}, Data de Nascimento: ${this.dataNascimento}, CPF: ${this.cpf}, Email: ${this.email}`;
     }
   
-    // Altera as informações do cliente
+    // Altera as informações do cliente e atualiza com os novos valores
     modificarDados(novosDados) {
-      // Atualiza as informações com os novos valores
       this.nome = novosDados.nome || this.nome;
       this.dataNascimento = novosDados.dataNascimento || this.dataNascimento;
       this.cpf = novosDados.cpf || this.cpf;
