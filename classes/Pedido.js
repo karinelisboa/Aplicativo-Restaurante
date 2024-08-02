@@ -13,11 +13,11 @@ class Pedido {
       return `ID: ${this.id}, ID Cliente: ${this.idCliente}, Status: ${this.status}, Data: ${this.dataPedido}`;
     }
 
-// Altera as informações do pedido e atualiza com os novo status
+    // Altera as informações do pedido e atualiza com os novo status
     modificarStatus(novoStatus) {
       this.status = novoStatus;
     }
   }
-// Permite usar a classe Cliente no arquivo main
+  // Permite usar a classe Cliente no arquivo main
   module.exports = Pedido;
   
