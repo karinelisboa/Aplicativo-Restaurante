@@ -18,6 +18,6 @@ class Pedido {
       this.status = novoStatus;
     }
   }
-  // Permite usar a classe Cliente no arquivo main
+  // Permite usar a classe Pedido no arquivo main
   module.exports = Pedido;
   
