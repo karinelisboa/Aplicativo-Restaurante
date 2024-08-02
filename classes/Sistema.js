@@ -1,3 +1,4 @@
+// Classe mãe
 class Sistema {
   constructor(id, nome, cpf, email, senha) {
     this.id = id;
@@ -12,10 +13,12 @@ class Sistema {
     this.usuarioLogado = null;
   }
 
+  // Retorna os dados básicos do usuário
   verDados() {
     return `ID: ${this.id}, Nome: ${this.nome}, CPF: ${this.cpf}, Email: ${this.email}`;
   }
 
+  // Modifica os dados atuais do usuário
   modificarDados(novosDados) {
     this.nome = novosDados.nome || this.nome;
     this.cpf = novosDados.cpf || this.cpf;
@@ -23,6 +26,7 @@ class Sistema {
     this.senha = novosDados.senha || this.senha;
   }
 
+  // Adiciona novos valores a cada respectiva classe
   adicionarCliente(cliente) {
     this.clientes.push(cliente);
   }
@@ -38,7 +42,8 @@ class Sistema {
   adicionarPedido(pedido) {
     this.pedidos.push(pedido);
   }
-
+  
+  // Lista todos os valores da respectiva classe (alguns em ordem)
   listarClientes() {
     return this.clientes
       .sort((a, b) => a.nome.localeCompare(b.nome))
@@ -64,6 +69,7 @@ class Sistema {
       .join('\n');
   }
 
+  // Realiza o login de um usuário com base no email e senha fornecidos
   login(email, senha) {
     const usuario = [...this.clientes, ...this.funcionarios].find(user => user.email === email && user.senha === senha);
     if (usuario) {
@@ -73,7 +79,8 @@ class Sistema {
       return 'Email ou senha inválidos.';
     }
   }
-
+  
+  // Realiza o logout
   logout() {
     this.usuarioLogado = null;
     return 'Logout realizado com sucesso.';
@@ -91,7 +98,8 @@ class Sistema {
       return 'Nenhum usuário logado.';
     }
   }
-
+  
+  // Modifica os status de um pedido
   modificarStatusPedido(idPedido, novoStatus) {
     const pedido = this.pedidos.find(pedido => pedido.id === idPedido);
     if (pedido) {
@@ -102,6 +110,7 @@ class Sistema {
     }
   }
 
+  // Edita os dados de um produto com base no ID do produto
   editarProduto(idProduto, novosDados) {
     const produto = this.produtos.find(produto => produto.id === idProduto);
     if (produto) {
@@ -121,12 +130,14 @@ class Sistema {
       return `Produto com ID ${idProduto} não encontrado.`;
     }
   }
-
+ 
+  // Adiciona um novo pedido a lista de pedidos
   fazerPedido(pedido) {
     this.pedidos.push(pedido);
     return `Pedido ${pedido.id} realizado com sucesso.`;
   }
-
+  
+  // Cancela um pedido se ele existir
   cancelarPedido(idPedido) {
     const pedido = this.pedidos.find(pedido => pedido.id === idPedido);
     if (pedido && pedido.status === 'pendente') {
@@ -142,6 +153,7 @@ class Sistema {
     return pedidosCliente.map(pedido => pedido.verDados()).join('\n');
   }
 
+  // Adiciona uma avaliação
   avaliarPedido(idPedido, avaliacao) {
     const pedido = this.pedidos.find(pedido => pedido.id === idPedido);
     if (pedido) {
