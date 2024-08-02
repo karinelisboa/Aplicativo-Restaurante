@@ -122,7 +122,7 @@ function menuPrincipal() {
 
 // Menu para cliente logado
 function menuClienteLogado() {
-  console.log('\n--- Menu Cliente Logado ---');
+  console.log('\nRestaurante Sabor & Arte \n(Cliente logado)');
   console.log('1. Ver Meus Dados');
   console.log('2. Modificar Meus Dados');
   console.log('3. Ver Lista de Produtos');
@@ -218,7 +218,7 @@ function menuClienteLogado() {
 
 // Menu para funcionário logado
 function menuFuncionarioLogado() {
-  console.log('\n--- Menu Funcionário Logado ---');
+  console.log('\nRestaurante Sabor & Arte \n(Você ainda não)');
   console.log('1. Ver Meus Dados');
   console.log('2. Modificar Meus Dados');
   console.log('3. Ver Lista de Pedidos');
