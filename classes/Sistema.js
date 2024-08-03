@@ -13,6 +13,30 @@ class Sistema {
     this.usuarioLogado = null;
   }
 
+ // Validações
+ static validarCPF(cpf) {
+  // Cpf deve estar no formato 000.000.000-00
+  const regex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+  return regex.test(cpf);
+}
+
+static validarEmail(email) {
+  // Email deve ter @
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}
+
+static validarSenha(senha) {
+  // Senha deve ter pelo menos 6 caracteres
+  return senha.length >= 6;
+}
+
+static validarData(data) {
+  // Data deve estar no formato xx/xx/xxxx
+  const regex = /^\d{2}\/\d{2}\/\d{4}$/;
+  return regex.test(data);
+}
+
   // Retorna os dados básicos do usuário
   verDados() {
     return `ID: ${this.id}, Nome: ${this.nome}, CPF: ${this.cpf}, Email: ${this.email}`;

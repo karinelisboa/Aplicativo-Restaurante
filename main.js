@@ -60,14 +60,34 @@ function menuNaoLogado() {
         });
         break;
       case '2':
-        // OPção de cadastro
+        // Opção de cadastro
         readline.question('Tipo de Cadastro (cliente/funcionario): ', tipo => {
           if (tipo === 'cliente') {
             readline.question('Nome: ', nome => {
-              readline.question('Data de Nascimento: ', dataNascimento => {
-                readline.question('CPF: ', cpf => {
-                  readline.question('Email: ', email => {
-                    readline.question('Senha: ', senha => {
+              // COnfere se a data de nascimento está no formato xx/xx/xxxxx
+              readline.question('Data de Nascimento (xx/xx/xxxx): ', dataNascimento => {
+                if (!Sistema.validarData(dataNascimento)) {
+                  console.log('Data de nascimento inválida.');
+                  return menuNaoLogado();
+                }
+                // Confere se o CPF está no formato xxx.xxx.xxx-xx
+                readline.question('CPF (xxx.xxx.xxx-xx): ', cpf => {
+                  if (!Sistema.validarCPF(cpf)) {
+                    console.log('CPF inválido.');
+                    return menuNaoLogado();
+                  }
+                  // Confere se a entrada o email tem @
+                  readline.question('Email (xxx@xxx): ', email => {
+                    if (!Sistema.validarEmail(email)) {
+                      console.log('Email inválido.');
+                      return menuNaoLogado();
+                    }
+                    // Confere se a senha tem mais de 6 caracteres
+                    readline.question('Senha (deve ter mais de 6 caracteres): ', senha => {
+                      if (!Sistema.validarSenha(senha)) {
+                        console.log('Senha inválida.');
+                        return menuNaoLogado();
+                      }
                       const id = sistema.clientes.length + 1;
                       const cliente = new Cliente(id, nome, dataNascimento, cpf, email, senha);
                       sistema.adicionarCliente(cliente);
@@ -79,11 +99,26 @@ function menuNaoLogado() {
               });
             });
           } else if (tipo === 'funcionario') {
-            // Cadastro de funcionario
+            // Cadastro de funcionário
             readline.question('Nome de Usuário: ', nomeUsuario => {
-              readline.question('CPF: ', cpf => {
-                readline.question('Email: ', email => {
-                  readline.question('Senha: ', senha => {
+              // Confere se o CPF está no formato xxx.xxx.xxx-xx
+              readline.question('CPF (xxx.xxx.xxx-xx): ', cpf => {
+                if (!Sistema.validarCPF(cpf)) {
+                  console.log('CPF inválido.');
+                  return menuNaoLogado();
+                }
+                // Confere se a entrada o email tem @
+                readline.question('Email (xxx@xxx): ', email => {
+                  if (!Sistema.validarEmail(email)) {
+                    console.log('Email inválido.');
+                    return menuNaoLogado();
+                  }
+                  // Confere se a senha tem mais de 6 caracteres
+                  readline.question('Senha (deve ter mais de 6 caracteres): ', senha => {
+                    if (!Sistema.validarSenha(senha)) {
+                      console.log('Senha inválida.');
+                      return menuNaoLogado();
+                    }
                     const id = sistema.funcionarios.length + 1;
                     const funcionario = new Funcionario(id, nomeUsuario, cpf, email, senha);
                     sistema.adicionarFuncionario(funcionario);
@@ -109,6 +144,7 @@ function menuNaoLogado() {
     }
   });
 }
+
 
 function menuPrincipal() {
   if (!sistema.usuarioLogado) {
@@ -142,10 +178,30 @@ function menuClienteLogado() {
       case '2':
         // Modificar dados do cliente
         readline.question('Nome (deixe em branco para não alterar): ', nome => {
-          readline.question('Data de Nascimento (deixe em branco para não alterar): ', dataNascimento => {
-            readline.question('CPF (deixe em branco para não alterar): ', cpf => {
+          // Valida se a data está no formato adequado
+          readline.question('Data de Nascimento (deixe em branco para não alterar, formato xx/xx/xxxx): ', dataNascimento => {
+            if (dataNascimento && !Sistema.validarData(dataNascimento)) {
+              console.log('Data de nascimento inválida.');
+              return menuClienteLogado();
+            }
+            // Valida se o CPF está no formato adequado
+            readline.question('CPF (deixe em branco para não alterar, formato 000.000.000-00): ', cpf => {
+              if (cpf && !Sistema.validarCPF(cpf)) {
+                console.log('CPF inválido.');
+                return menuClienteLogado();
+              }
+              // Valida se o email está no formato adequado
               readline.question('Email (deixe em branco para não alterar): ', email => {
-                readline.question('Senha (deixe em branco para não alterar): ', senha => {
+                if (email && !Sistema.validarEmail(email)) {
+                  console.log('Email inválido.');
+                  return menuClienteLogado();
+                }
+                // Valida se a senha tem mais de 6 caracteres
+                readline.question('Senha (mais de 6 caracteres, deixe em branco para não alterar): ', senha => {
+                  if (senha && !Sistema.validarSenha(senha)) {
+                    console.log('Senha inválida.');
+                    return menuClienteLogado();
+                  }
                   const novosDados = { nome, dataNascimento, cpf, email, senha };
                   console.log(sistema.modificarMeusDados(novosDados));
                   menuClienteLogado();
@@ -157,7 +213,7 @@ function menuClienteLogado() {
         break;
       case '3':
         // Ver lista de produtos
-        console.log('Lista de produtos em ordem alfabética:\n')
+        console.log('Lista de produtos em ordem alfabética:\n');
         console.log(sistema.listarProdutos());
         menuClienteLogado();
         break;
@@ -180,19 +236,27 @@ function menuClienteLogado() {
       case '5':
         // Cancelar pedido
         readline.question('ID do Pedido: ', idPedido => {
+          if (isNaN(idPedido) || Number(idPedido) <= 0) {
+            console.log('ID de pedido inválido.');
+            return menuClienteLogado();
+          }
           console.log(sistema.cancelarPedido(Number(idPedido)));
           menuClienteLogado();
         });
         break;
       case '6':
         // Ver lista de pedidos do cliente
-        console.log('Lista de pedidos em ordem cronológica (do mais recente pro mais antigo): \n')
+        console.log('Lista de pedidos em ordem cronológica (do mais recente para o mais antigo):\n');
         console.log(sistema.verPedidosCliente(sistema.usuarioLogado.id));
         menuClienteLogado();
         break;
       case '7':
         // Avaliar pedido
         readline.question('ID do Pedido: ', idPedido => {
+          if (isNaN(idPedido) || Number(idPedido) <= 0) {
+            console.log('ID de pedido inválido.');
+            return menuClienteLogado();
+          }
           readline.question('Avaliação: ', avaliacao => {
             console.log(sistema.avaliarPedido(Number(idPedido), avaliacao));
             menuClienteLogado();
@@ -216,9 +280,10 @@ function menuClienteLogado() {
   });
 }
 
+
 // Menu para funcionário logado
 function menuFuncionarioLogado() {
-  console.log('\nRestaurante Sabor & Arte \n(Você ainda não)');
+  console.log('\nRestaurante Sabor & Arte \n(Funcionário logado)');
   console.log('1. Ver Meus Dados');
   console.log('2. Modificar Meus Dados');
   console.log('3. Ver Lista de Pedidos');
@@ -232,16 +297,31 @@ function menuFuncionarioLogado() {
   readline.question('Escolha uma opção: ', opcao => {
     switch (opcao) {
       case '1':
-        // Ver dados do funcionario
+        // Ver dados do funcionário
         console.log(sistema.verMeusDados());
         menuFuncionarioLogado();
         break;
       case '2':
-        // Modificar dados do funcionario
+        // Modificar dados do funcionário
         readline.question('Nome de Usuário (deixe em branco para não alterar): ', nomeUsuario => {
-          readline.question('CPF (deixe em branco para não alterar): ', cpf => {
+          // Valida se o CPF está no formato certo
+          readline.question('CPF (deixe em branco para não alterar, formato 000.000.000-00): ', cpf => {
+            if (cpf && !Sistema.validarCPF(cpf)) {
+              console.log('CPF inválido.');
+              return menuFuncionarioLogado();
+            }
+            // Valida se o email está no formato certo
             readline.question('Email (deixe em branco para não alterar): ', email => {
+              if (email && !Sistema.validarEmail(email)) {
+                console.log('Email inválido.');
+                return menuFuncionarioLogado();
+              }
+              // Confere se a senha tem mais de 6 caracteres
               readline.question('Senha (deixe em branco para não alterar): ', senha => {
+                if (senha && !Sistema.validarSenha(senha)) {
+                  console.log('Senha inválida.');
+                  return menuFuncionarioLogado();
+                }
                 const novosDados = { nomeUsuario, cpf, email, senha };
                 console.log(sistema.modificarMeusDados(novosDados));
                 menuFuncionarioLogado();
@@ -252,25 +332,29 @@ function menuFuncionarioLogado() {
         break;
       case '3':
         // Ver lista de pedidos
-        console.log('Lista de pedidos em ordem cronológica (do mais recente pro mais antigo): \n')
+        console.log('Lista de pedidos em ordem cronológica (do mais recente para o mais antigo):\n');
         console.log(sistema.listarPedidos());
         menuFuncionarioLogado();
         break;
       case '4':
         // Ver lista de produtos
-        console.log('Lista de produtos em ordem alfabética:\n')
+        console.log('Lista de produtos em ordem alfabética:\n');
         console.log(sistema.listarProdutos());
         menuFuncionarioLogado();
         break;
       case '5':
         // Ver lista de clientes
-        console.log('Lista de clientes em ordem alfabética:\n')
+        console.log('Lista de clientes em ordem alfabética:\n');
         console.log(sistema.listarClientes());
         menuFuncionarioLogado();
         break;
       case '6':
         // Mudar status do pedido
         readline.question('ID do Pedido: ', idPedido => {
+          if (isNaN(idPedido) || Number(idPedido) <= 0) {
+            console.log('ID de pedido inválido.');
+            return menuFuncionarioLogado();
+          }
           readline.question('Novo Status: ', novoStatus => {
             console.log(sistema.modificarStatusPedido(Number(idPedido), novoStatus));
             menuFuncionarioLogado();
@@ -281,9 +365,22 @@ function menuFuncionarioLogado() {
         // Adicionar produto
         readline.question('Nome: ', nome => {
           readline.question('Descrição: ', descricao => {
-            readline.question('Data de Validade: ', dataValidade => {
+            readline.question('Data de Validade (xx/xx/xxxx): ', dataValidade => {
+              // Confere se a data está em um formato valido
+              if (!Sistema.validarData(dataValidade)) {
+                console.log('Data de validade inválida.');
+                return menuFuncionarioLogado();
+              }
               readline.question('Preço: ', preco => {
+                if (isNaN(preco) || Number(preco) <= 0) {
+                  console.log('Preço inválido.');
+                  return menuFuncionarioLogado();
+                }
                 readline.question('Quantidade: ', quantidade => {
+                  if (isNaN(quantidade) || Number(quantidade) <= 0) {
+                    console.log('Quantidade inválida.');
+                    return menuFuncionarioLogado();
+                  }
                   const id = sistema.produtos.length + 1;
                   const produto = new Produto(id, nome, descricao, dataValidade, Number(preco), Number(quantidade));
                   sistema.adicionarProduto(produto);
@@ -298,12 +395,31 @@ function menuFuncionarioLogado() {
       case '8':
         // Editar produto
         readline.question('ID do Produto: ', idProduto => {
+          if (isNaN(idProduto) || Number(idProduto) <= 0) {
+            console.log('ID de produto inválido.');
+            return menuFuncionarioLogado();
+          }
           readline.question('Nome (deixe em branco para não alterar): ', nome => {
             readline.question('Descrição (deixe em branco para não alterar): ', descricao => {
-              readline.question('Data de Validade (deixe em branco para não alterar): ', dataValidade => {
+              readline.question('Data de Validade (deixe em branco para não alterar, formato xx/xx/xxxx): ', dataValidade => {
+                // Confere se a data está no formato correto
+                if (dataValidade && !Sistema.validarData(dataValidade)) {
+                  console.log('Data de validade inválida.');
+                  return menuFuncionarioLogado();
+                }
                 readline.question('Preço (deixe em branco para não alterar): ', preco => {
+                  const precoNumero = preco ? Number(preco) : undefined;
+                  if (preco && (isNaN(precoNumero) || precoNumero <= 0)) {
+                    console.log('Preço inválido.');
+                    return menuFuncionarioLogado();
+                  }
                   readline.question('Quantidade (deixe em branco para não alterar): ', quantidade => {
-                    const novosDados = { nome, descricao, dataValidade, preco: Number(preco), quantidade: Number(quantidade) };
+                    const quantidadeNumero = quantidade ? Number(quantidade) : undefined;
+                    if (quantidade && (isNaN(quantidadeNumero) || quantidadeNumero <= 0)) {
+                      console.log('Quantidade inválida.');
+                      return menuFuncionarioLogado();
+                    }
+                    const novosDados = { nome, descricao, dataValidade, preco: precoNumero, quantidade: quantidadeNumero };
                     console.log(sistema.editarProduto(Number(idProduto), novosDados));
                     menuFuncionarioLogado();
                   });
@@ -316,6 +432,10 @@ function menuFuncionarioLogado() {
       case '9':
         // Excluir produto
         readline.question('ID do Produto: ', idProduto => {
+          if (isNaN(idProduto) || Number(idProduto) <= 0) {
+            console.log('ID de produto inválido.');
+            return menuFuncionarioLogado();
+          }
           console.log(sistema.excluirProduto(Number(idProduto)));
           menuFuncionarioLogado();
         });
