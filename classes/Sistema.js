@@ -68,19 +68,22 @@ static validarData(data) {
   }
   
   // Lista todos os valores da respectiva classe (alguns em ordem)
+  // A busca agora é feita utilizando Map  (que é mais rápido)
   listarClientes() {
-    return this.clientes
+    return Array.from(this.clientes.values())
       .sort((a, b) => a.nome.localeCompare(b.nome))
       .map(cliente => cliente.verDados())
       .join('\n');
   }
 
   listarFuncionarios() {
-    return this.funcionarios.map(funcionario => funcionario.verDados()).join('\n');
+    return Array.from(this.funcionarios.values())
+      .map(funcionario => funcionario.verDados())
+      .join('\n');
   }
 
   listarProdutos() {
-    return this.produtos
+    return Array.from(this.produtos.values())
       .sort((a, b) => a.nome.localeCompare(b.nome))
       .map(produto => produto.verDados())
       .join('\n');

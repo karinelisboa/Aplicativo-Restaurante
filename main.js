@@ -16,7 +16,7 @@ const sistema = new Sistema();
 // Adicionando dados de exemplo
 // Dados cliente
 const cliente1 = new Cliente(1, 'Tadeu Silva', '03/05/2004', '111.111.111-11', 'tadeu@gmail.com', 'senha');
-const cliente2 = new Cliente(2, 'Alice Souza', '15/03/1985', '999.999.999-99', 'tadeu@gmail.com', 'password');
+const cliente2 = new Cliente(2, 'Alice Souza', '15/03/1985', '999.999.999-99', 'alice@gmail.com', 'password');
 sistema.adicionarCliente(cliente1);
 sistema.adicionarCliente(cliente2);
 
